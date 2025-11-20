@@ -1,11 +1,8 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
-#import os  # We'll use this later for better path handling
 
 SERVICE_ACCOUNT_KEY_PATH = "C:/Users/Claudiu/Downloads/agriculturedb-firebase-adminsdk-fbsvc-b25496b64b.json"
 
-# --- Initialization Logic ---
-# Check if the Firebase app has already been initialized (critical for reloads/testing)
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate(SERVICE_ACCOUNT_KEY_PATH)
