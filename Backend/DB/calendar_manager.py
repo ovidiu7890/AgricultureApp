@@ -1,6 +1,5 @@
 from google.cloud import firestore
 from .firebase_config import db
-from google.cloud.firestore import Query
 
 def create_calendar_entry_db(user_uid, plant_name, date, notes=None):
     try:
@@ -26,22 +25,30 @@ def get_user_calendar_db(user_uid):
     try:
         entries_ref = db.collection('calendarEntries')
 
-        query = entries_ref.where('userId', '==', user_uid).order_by('date', direction=Query.ASCENDING)
+        # Query without order_by to avoid Firestore index issues
+        query = entries_ref.where('userId', '==', user_uid)
 
         entries_list = []
         for doc in query.stream():
             entry_data = doc.to_dict()
             entry_data['id'] = doc.id
 
+            # Convert date to string if it's a datetime object
             if 'date' in entry_data and entry_data['date'] is not None:
-                entry_data['date'] = entry_data['date'].strftime('%Y-%m-%d')
+                if hasattr(entry_data['date'], 'strftime'):
+                    # It's a datetime object
+                    entry_data['date'] = entry_data['date'].strftime('%Y-%m-%d')
+                # If it's already a string, leave it as is
 
             entries_list.append(entry_data)
 
+        print(f"Found {len(entries_list)} calendar entries for user {user_uid}")
         return entries_list
 
     except Exception as e:
         print(f"Error fetching calendar for user {user_uid}: {e}")
+        import traceback
+        traceback.print_exc()
         raise
 
 def update_calendar_entry_db(entry_id, update_fields):
