@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-SERVICE_ACCOUNT_KEY_PATH = "C:/Users/Claudiu/Downloads/agriculturedb-firebase-adminsdk-fbsvc-b25496b64b.json"
+SERVICE_ACCOUNT_KEY_PATH = r"C:\Facultate\An3Sem1\IS\agriculturedb-firebase-adminsdk-fbsvc-b25496b64b.json"
 
 if not firebase_admin._apps:
     try:

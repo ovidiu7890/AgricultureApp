@@ -11,18 +11,13 @@ from DB.calendar_manager import (
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/api/calendar')
 
 
-# --- Helper function to get the UID (MUST BE REPLACED WITH AUTH LATER) ---
-# NOTE: Replace this mock function with your actual Firebase Auth token verification logic!
-def get_user_uid_from_request():
-    data = request.get_json()
-    return data.get('userId')
-
-
 @calendar_bp.route('/', methods=['GET'])
 def get_calendar_entries():
-    user_uid = get_user_uid_from_request()
+    # Get userId from query parameters for GET request
+    user_uid = request.args.get('userId')
+    
     if not user_uid:
-        return jsonify({"error": "Authorization required."}), 401
+        return jsonify({"error": "userId query parameter required."}), 401
 
     try:
         entries = get_user_calendar_db(user_uid)
