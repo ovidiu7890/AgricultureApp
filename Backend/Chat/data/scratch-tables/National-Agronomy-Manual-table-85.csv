@@ -1,0 +1,22 @@
+,Texture symbol,Texture,AWC range (in/in),AWC range (in/ft),Estimated typical AWC (in/ft)
+0,COS,Coarse sand,0.01-0.03,0.1-0.4,0.25
+1,S,Sand,0.01-0.03,0.1-0.4,0.25
+2,FS,Fine sand,0.05-0.07,0.6-0.8,0.75
+3,VFS,Very fine sand,0.05-0.07,0.6-0.8,0.75
+4,LCOS,Loamy coarse sand,0.06-0.08,0.7-1.0,0.85
+5,LS,Loamy sand,0.06-0.08,0.7-1.0,0.85
+6,LFS,Loamy fine sand,0.09- 0.11,1.1-1.3,1.25
+7,LVFS,Loamy very fine sand,0.10-0.12,1.0-1.4,1.25
+8,COSL,Coarse sandy loam,0.10-0.12,1.2-1.4,1.3
+9,SL,Sandy loam,0.11-0.13,1.3-1.6,1.45
+10,FSL,Fine sandy loam,0.13-0.15,1.6-1.8,1.7
+11,VFSL,Very fine sandy loam,0.15-0.17,1.8-2.0,1.9
+12,L,Loam,0.16-0.18,1.9-2.2,2.0
+13,SIL,Silt loam,0.19-0.22,2.3-2.6,2.45
+14,SI,Silt,0.16-0.18,1.9-2.2,2.0
+15,SCL,Sandy clay loam,0.14-0.16,1.7-1.9,1.8
+16,CL,Clay loam,0.15-0.17,1.8-2.0,1.9
+17,SICL,Silty clay loam,0.17-0.19,2.0-2.3,2.15
+18,SC,Sandy clay,0.15-0.17,1.8-2.0,1.9
+19,SIC,Silty clay,0.15-0.17,1.8-2.0,1.9
+20,C,Clay,0.14-0.16,1.7-1.9,1.8

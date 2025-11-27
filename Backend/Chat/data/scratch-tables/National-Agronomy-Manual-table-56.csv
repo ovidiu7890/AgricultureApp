@@ -1,0 +1,10 @@
+,Pollutant,"CCL a,b ppm f","PCL a,c ppm","CPLR a,d lb/A","Mean a,g ppm","Mean a,h ppm"
+0,Arsenic (As),75,41,36,10,5
+1,Cadmium,85,39,35,7,3
+2,Copper,4300,1500,1340,741,476
+3,Lead,840,300,270,134,82
+4,Mercury,57,17,16,5,2
+5,Molybdenum,75,e/,e/,9,13
+6,Nickel,420,420,375,43,23
+7,Selenium,100,100,89,5,4
+8,Zinc,7500,2800,2500,1202,693
