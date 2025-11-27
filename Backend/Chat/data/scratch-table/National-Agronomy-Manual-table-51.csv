@@ -1,0 +1,7 @@
+,Application method.,Semi-solid manure.---------- N availability factor ------,Liquid slurry.---------- N availability factor ------,Lagoon liquid.---------- N availability factor ------,Dry litter.---------- N availability factor ------
+0,Injection,-,0.95,0.95,-
+1,Broadcast with immediate incor poration,0.75,0.75,0.90,0.90
+2,Incorporated after 2 days,0.65,0.65,0.80,0.80
+3,Incorporated after 4 days,0.40,0.40,0.60,0.65
+4,Incorporated after 7 days or never incorpo¬ rated,0.25,0.25,0.45,0.50
+5,Irrigation without incorporation,-,0.20,0.50,-

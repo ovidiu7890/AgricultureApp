@@ -1,0 +1,25 @@
+,Element,Name of material,Chemical composition,Percent of element,CCE*
+0,S,Elemental sulfur,S,100.0,none
+1,S,Ammonium bisulfate,NH 4 HSO 4,17.0,none
+2,S,Ammonium polysulfide,(NH 4 ) 2 S x,40-50,none
+3,S,Aluminum sulfate,Al 2 (SO 4 ) 3,14.0,none
+4,S,Ammonium sulfate,(NH 4 ) 2 SO 4,24.2,none
+5,S,Ammonium thiosulfate,(NH 4 ) 2 S 2 O 3 •5H 2 O,26.0,none
+6,S,Gypsum,CaSO 4,18.6,none
+7,S,K-Mag,K 2 SO 4 •2MgSO 4,22.0,none
+8,S,Potassium sulfate,K 2 SO 4,18.0,none
+9,S,Magnesium sulfate,MgSO 4,13.0,none
+10,Ca,Calcitic limestone,CaCO 3,32.0,85-100
+11,Ca,Dolomitic limestone,CaMg(CO 3 ) 2,22.0,95-108
+12,Ca,Hydrated lime,Ca(OH) 2,45.0,120-135
+13,Ca,Calcium oxide,CaO,55.0,150-175
+14,Ca,Gypsum,CaSO 4,22.3,none
+15,Ca,Calcium nitrate,Ca(NO 3 ) 2,19.4,none
+16,Ca,Basic slag,-,29.0,50-70
+17,Mg,Dolomitic limestone,CaMg(CO 3 ) 2,3-12,95-108
+18,Mg,Epsom salts,MgSO 4 •7H 2 O,9.6,none
+19,Mg,Kiserite,MgSO 4 •H 2 O,18.3,none
+20,Mg,K-Mag,K 2 SO 4 •2MgSO 4,11.0,none
+21,Mg,Magnesium nitrate,Mg(NO 3 ) 2,19.0,none
+22,Mg,Magnesia,MgO,55-60,none
+23,Mg,Basic slag,-,3,none

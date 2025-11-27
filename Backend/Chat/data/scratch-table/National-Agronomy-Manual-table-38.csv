@@ -1,0 +1,15 @@
+,Legume.,Criteria.,"--------------------------State--------------------------.Pennsylvania.------------- nitrogen credit, lb/acre ------------","--------------------------State--------------------------.Maryland.------------- nitrogen credit, lb/acre ------------","--------------------------State--------------------------.Delaware.------------- nitrogen credit, lb/acre ------------","--------------------------State--------------------------.Virginia/West Virginia.------------- nitrogen credit, lb/acre ------------"
+0,Alfalfa,First year after legume,-,100-150 2/,90,-
+1,,> 50 percent stand,80-120 1/,-,-,90
+2,,25-49 percent stand,60-80 1/,-,-,70
+3,Red clover and trefoil,First year after legume,,40,60,
+4,,> 50 percent stand,60-90 1/,-,-,80 2/
+5,,25-49 percent stand,50-60 1/,-,-,60 2/
+6,,< 25 percent stand,40,-,-,40 2/
+7,Ladino clover,,-,60,-,-
+8,Crimson clover,,-,50-100 3/,-,-
+9,Hairy vetch,,-,75-150,-,50-100
+10,Austrian winter peas,,-,75-150,-,-
+11,Lespedeza,,-,20,-,-
+12,Peanuts,,-,-,-,45
+13,Soybeans,First year after grain,1 lb N/bu soy- beans,15-20 4/,0.5 lb/bu soybeans,0.5 lb/bu of soybeans or 20 lb if yield is unknown

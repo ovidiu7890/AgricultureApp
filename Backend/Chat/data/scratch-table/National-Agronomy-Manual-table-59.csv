@@ -1,0 +1,7 @@
+,0,1
+0,PAN =,lb plant-available N/dry ton biosolids
+1,NO 3 -N=,lb nitrate N/dry ton biosolids
+2,K vol =,"volatilization factor, or plant-available fraction of NH 4 -N (table 10.4)"
+3,NH 4 -N=,lb ammonium N/dry ton biosolids
+4,K min =,"mineralization factor, or plant-available fraction of Org-N (table 10.5)"
+5,Org-N =,lb organic N/dry ton biosolids (estimated by subtraction NH 4 -N from total Kjel- dahl N)

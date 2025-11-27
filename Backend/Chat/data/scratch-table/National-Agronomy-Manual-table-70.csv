@@ -1,0 +1,6 @@
+,Erosion,Soil Loss (ton/acre/yr),Soil Loss (ton/acre/yr),Soil Loss (ton/acre/yr),Soil Loss (ton/acre/yr),CMU/Field ID.
+0,Runoff Potential,0 Drainage class is Excessively,2 Drainage class is Somewhat Excessively,4 Drainage class is Well/Moderately Well,6 Drainage class is Somewhat Poorly,8 Drainage class is Poor/Very Poorly
+1,Subsurface Drainage,0 None,,1 Random,,2* Patterned
+2,Contributing Distance,0 More than 500 feet,2 350 to 500 feet,4 200 to 349 feet,6 100 to 199 feet OR less than 100 feet with 35-foot buffer,9‡ less than 100 feet
+3,Transport Sum = Erosion + Runoff Potential + Subsurface Drainage + Contributing Distance,Transport Sum = Erosion + Runoff Potential + Subsurface Drainage + Contributing Distance,Transport Sum = Erosion + Runoff Potential + Subsurface Drainage + Contributing Distance,Transport Sum = Erosion + Runoff Potential + Subsurface Drainage + Contributing Distance,Transport Sum = Erosion + Runoff Potential + Subsurface Drainage + Contributing Distance,Transport Sum = Erosion + Runoff Potential + Subsurface Drainage + Contributing Distance
+4,Modified Connectivity,0.85 50-foot Riparian Buffer Applies to distances less than 100 feet,,1.0 Grassed Waterway or None,,1.1 Direct Connection Applies to distances greater than 100 feet

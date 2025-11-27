@@ -1,0 +1,17 @@
+,Disease,Responsible organism,Disease,Responsible organism
+0,Bacterial,,Viral,
+1,Salmonella,Salmonella sp.,New Castle,Virus
+2,Leptospirosis,Leptospiral pomona,Hog Cholera,Virus
+3,Anthrax,Bacillus anthracis,Foot and Mouth,Virus
+4,Tuberculosis,Mycobacterium tuberculosis Mycobacterium avium,Psittacosis,Virus
+5,Johnes disease,Mycobacterium paratuberculosis,Fungal Coccidioidomycosis Histoplasm capsulatum,Coccidioides immitus
+6,Brucellosis,Brucella abortus Brucella melitensis Brucella suis Histoplasmosis,Ringworm,Various microsporum and trichophyton
+7,Listerosis,Listeria monocytogenes,Protozoal,
+8,Tetanus,Clostridium tetani,Coccidiosis,Eimeria sp.
+9,Tularemia,Pasturella tularensis,Balantidiasis,Balatidium coli
+10,Erysipelas,Erysipelothrix rhusiopathiae,Toxoplasmosis,Toxoplasma sp.
+11,Colibacilosis,E. coli (some serotypes),,
+12,Coliform mastitis-metritis,E. coli (some serotypes),Parasitic,
+13,,,Ascariasis,Ascaris lumbricoides
+14,Rickettsial,,Sarcocystiasis,Sarcocystis sp.
+15,Q fever,Coxiella burneti,,
