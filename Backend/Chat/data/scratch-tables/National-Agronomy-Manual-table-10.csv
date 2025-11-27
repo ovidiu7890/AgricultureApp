@@ -1,0 +1,10 @@
+,0,1,2
+0,where:,where:,where:
+1,E,=,quantity of erosion
+2,I,=,soil cloddiness
+3,R,=,residue
+4,K,=,roughness
+5,ƒ,=,soil abradability
+6,B,=,wind barrier
+7,W,=,width of field
+8,D,=,wind direction

@@ -1,0 +1,15 @@
+,Manure system.,Nitrogen.------------------percent lost-----------------,Phosphorus (P 2 O 5 ).------------------percent lost-----------------,Potassium (K 2 O).------------------percent lost-----------------
+0,Solid,,,
+1,Daily scrape and haul,20-35,5-15,5-15
+2,Manure pack,20-40,10-20,10-20
+3,"Poultry, deep pit or litter",25-50,5-15,5-15
+4,Solids on open lot,,,
+5,Scrape once/year,40-55,20-40,30-50
+6,Daily scrape and haul,20-35,10-20,15-25
+7,"Separated solids, 90 days storage",30,10-20,10-20
+8,Liquid (slurry),,,
+9,Anaerobic pit,15-30,5-20,5-20
+10,Aboveground storage,10-30,5-15,5-15
+11,"Manure basin or runoff pond, 120-180 days storage",20-40,5-50,5-50
+12,Liquid-lagoon,70-85,50-80,30-80
+13,"Lagoon, 365 days",90,50-80,30-80

@@ -1,0 +1,5 @@
+,WIN-PST identified final hazard rating,Minimum mitigation index score level needed
+0,Low or very low,None needed
+1,Intermediate,20
+2,High,40
+3,Extra high,60 or more

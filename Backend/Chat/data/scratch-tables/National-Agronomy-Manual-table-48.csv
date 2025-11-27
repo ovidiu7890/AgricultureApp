@@ -1,0 +1,10 @@
+,Table 503-25.Manure storage/treatment system.,"Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Nitrogen.N produced","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Nitrogen.Factor b/","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Nitrogen.Available N","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Phosphorus (P 2 O 5 ).P produced","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Phosphorus (P 2 O 5 ).Factor b/","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Phosphorus (P 2 O 5 ).Available P","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Potassium (K 2 O).K produced","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Potassium (K 2 O).Factor b","Estimating annual nutrient availability after losses from open lot, storage or lagoon a/.Potassium (K 2 O).Available K"
+0,Example: poultry manure on sawdust; per ton (from table 503-21),60,× 0.50,30,58,× 1.0,58,52,× 1.0,52
+1,Open lot or feedlot,,× 0.50,,,× 0.95,,,× 0.70,
+2,"Storage (slurry manure, bot- tom loaded storage)",,× 0.85,,,× 1.0,,,× 1.0,
+3,"Storage (liquid manure, top loaded storage)",,× 0.70,,,× 1.0,,,× 1.0,
+4,Storage (pit beneath slatted floor),,× 0.75,,,× 1.0,,,× 1.0,
+5,Poultry manure in pit be- neath slatted floor,,× 0.85,,,× 1.0,,,× 1.0,
+6,Poultry manure on shavings or sawdust held in house,,× 0.50,,,× 1.0,,,× 1.0,
+7,1-cell anaerobic treatment lagoon,,× 0.20,,,× 0.35,,,× 0.65,
+8,Multi-cell anaerobic treat- ment lagoon,,× 0.10,,,× 0.35,,,× 0.65,

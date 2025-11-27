@@ -1,0 +1,4 @@
+,Criteria,Farm is deficient in N,Farm has balanced N,Farm has excess N
+0,Feed source( percent off farm feed),On farm (<50 percent),Combination (50-80 percent),Off-farm (>80 per- cent)
+1,Animal density (AU/A) 2/,Low (<1.25 AU/A),Medium (1.25-2.25 AU/A),High (>2.25 AU/A)
+2,Pollution potential 3/,Low,Medium,High
