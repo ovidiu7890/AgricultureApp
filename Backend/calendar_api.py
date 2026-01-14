@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 from datetime import datetime
+from ics import Calendar, Event
 
 from DB.calendar_manager import (
     create_calendar_entry_db,
@@ -82,3 +83,38 @@ def delete_calendar_entry(entry_id):
 
     except Exception:
         return jsonify({"error": "Failed to delete calendar entry."}), 500
+
+
+@calendar_bp.route('/export', methods=['GET'])
+def export_calendar_ics():
+    user_uid = request.args.get('userId')
+
+    if not user_uid:
+        return jsonify({"error": "userId query parameter required."}), 401
+
+    try:
+        entries = get_user_calendar_db(user_uid)
+
+        c = Calendar()
+
+        for entry in entries:
+            e = Event()
+
+            e.name = f"Agriculture: {entry['plantName']}"
+            e.begin = entry['date']
+            if entry.get('notes'):
+                e.description = entry['notes']
+
+            e.make_all_day()
+
+            c.events.add(e)
+
+        return Response(
+            c.serialize(),
+            mimetype='text/calendar',
+            headers={"Content-disposition": "attachment; filename=agriculture_schedule.ics"}
+        )
+
+    except Exception as e:
+        print(f"Export error: {e}")
+        return jsonify({"error": "Failed to export calendar."}), 500
