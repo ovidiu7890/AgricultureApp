@@ -19,12 +19,14 @@ def _get_author_username(author_id):
         pass
     return "Anonymous"
 
-def get_all_posts_db():
+def get_all_posts_db(viewer_id=None):
     try:
         posts_ref = db.collection('posts')
         query = posts_ref.order_by('createdAt', direction=Query.DESCENDING).limit(50)
 
         posts_list = []
+        # Pre-fetch if possible or just loop
+        # For simplicity in this non-relational DB without easy joins, loop:
         for doc in query.stream():
             post_data = doc.to_dict()
             post_data['id'] = doc.id
@@ -38,6 +40,13 @@ def get_all_posts_db():
             # Backward compatibility if needed, or just for ease
             post_data['author'] = post_data['username']
 
+            # Check if viewer has voted
+            if viewer_id:
+                vote_ref =  db.collection('posts').document(doc.id).collection('votes').document(viewer_id)
+                post_data['hasVoted'] = vote_ref.get().exists
+            else:
+                post_data['hasVoted'] = False
+
             posts_list.append(post_data)
 
         return posts_list
@@ -47,7 +56,7 @@ def get_all_posts_db():
         raise
 
 
-def get_single_post_db(post_id):
+def get_single_post_db(post_id, viewer_id=None):
     doc_ref = db.collection('posts').document(post_id)
     doc = doc_ref.get()
 
@@ -60,6 +69,12 @@ def get_single_post_db(post_id):
 
         post_data['username'] = _get_author_username(post_data.get('authorId'))
         post_data['author'] = post_data['username']
+
+        if viewer_id:
+             vote_ref = doc_ref.collection('votes').document(viewer_id)
+             post_data['hasVoted'] = vote_ref.get().exists
+        else:
+             post_data['hasVoted'] = False
 
         return post_data
     else:
@@ -189,25 +204,28 @@ def update_vote_transaction(transaction, post_ref, user_uid, vote_type):
     vote_doc = vote_doc_ref.get(transaction=transaction)
 
     if vote_doc.exists:
-        raise ValueError("User has already voted on this post.")
-
-    post_snapshot = post_ref.get(transaction=transaction)
-    if not post_snapshot.exists:
-        raise ValueError("Post does not exist.")
-
-    update_data = {}
-    if vote_type == 'up':
-        update_data = {'upvotes': firestore.Increment(1)}
-    elif vote_type == 'down':
-        update_data = {'downvotes': firestore.Increment(1)}
+        # Toggle off (remove vote)
+        if vote_type == 'up':
+            update_data = {'upvotes': firestore.Increment(-1)}
+        elif vote_type == 'down':
+            update_data = {'downvotes': firestore.Increment(-1)}
+        
+        transaction.update(post_ref, update_data)
+        transaction.delete(vote_doc_ref)
+        return True, "unvoted"
     else:
-        raise ValueError("Invalid vote type.")
+        # Add vote
+        update_data = {}
+        if vote_type == 'up':
+            update_data = {'upvotes': firestore.Increment(1)}
+        elif vote_type == 'down':
+            update_data = {'downvotes': firestore.Increment(1)}
+        else:
+            raise ValueError("Invalid vote type.")
 
-
-    transaction.update(post_ref, update_data)
-    transaction.set(vote_doc_ref, {'votedAt': firestore.SERVER_TIMESTAMP})
-
-    return True
+        transaction.update(post_ref, update_data)
+        transaction.set(vote_doc_ref, {'votedAt': firestore.SERVER_TIMESTAMP})
+        return True, "voted"
 
 
 def handle_vote_db(post_id, user_uid, vote_type):

@@ -5,8 +5,10 @@ import Sidebar from '../components/Sidebar';
 import CreatePostModal from '../components/CreatePostModal';
 import ChatWidget from '../components/ChatWidget';
 import { getAllPosts } from '../services/forumService';
+import { useAuth } from '../context/AuthContext';
 
 const ForumPage = ({ searchQuery }) => {
+  const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [activeCategory, setActiveCategory] = useState('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -14,12 +16,12 @@ const ForumPage = ({ searchQuery }) => {
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [user]); // Reload if user changes (e.g. login)
 
   const loadPosts = async () => {
     try {
       setIsLoading(true);
-      const data = await getAllPosts();
+      const data = await getAllPosts(user?.uid);
       setPosts(data);
     } catch (error) {
       console.error('Failed to load posts:', error);

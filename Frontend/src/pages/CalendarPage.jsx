@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Calendar as CalendarIcon } from 'lucide-react';
+import { Plus, Calendar as CalendarIcon, Download } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import CalendarEntry from '../components/CalendarEntry';
 import CalendarForm from '../components/CalendarForm';
-import { getCalendarEntries, deleteCalendarEntry } from '../services/calendarService';
+import { getCalendarEntries, deleteCalendarEntry, exportCalendar } from '../services/calendarService';
 
 const CalendarPage = () => {
   const { user } = useAuth();
@@ -70,6 +70,23 @@ const CalendarPage = () => {
     return groups;
   }, {});
 
+  const handleExport = async () => {
+    try {
+      const blob = await exportCalendar(user.uid);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'agriculture_schedule.ics';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Failed to export calendar:', error);
+      alert('Failed to export calendar');
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       {/* Header */}
@@ -78,13 +95,22 @@ const CalendarPage = () => {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Planting Calendar</h1>
           <p className="text-slate-600">Track your planting schedule and important dates</p>
         </div>
-        <button
-          onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md"
-        >
-          <Plus size={20} />
-          Add Entry
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-3 rounded-lg font-medium transition-colors shadow-sm"
+          >
+            <Download size={20} />
+            Export to Calendar
+          </button>
+          <button
+            onClick={() => setIsFormOpen(true)}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md"
+          >
+            <Plus size={20} />
+            Add Entry
+          </button>
+        </div>
       </div>
 
       {/* Calendar Entries */}

@@ -15,12 +15,14 @@ const ChatWidget = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
 
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
   const startNewConversation = () => {
@@ -104,6 +106,7 @@ const ChatWidget = () => {
           </div>
         </div>
         <button 
+          type="button"
           onClick={startNewConversation}
           className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
           title="New conversation"
@@ -113,7 +116,10 @@ const ChatWidget = () => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-slate-50 min-h-[400px]">
+      <div 
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto p-3 space-y-3 bg-slate-50 min-h-[400px]"
+      >
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -173,8 +179,6 @@ const ChatWidget = () => {
             </div>
           </div>
         )}
-        
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}

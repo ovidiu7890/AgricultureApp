@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageSquare, ThumbsUp, Share2, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -8,15 +8,38 @@ const PostCard = ({ post, onVote }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const [votes, setVotes] = useState(post.upvotes || 0);
+  const [hasVoted, setHasVoted] = useState(post.hasVoted || false);
+  const [isVoting, setIsVoting] = useState(false);
+
+  useEffect(() => {
+    setVotes(post.upvotes || 0);
+    setHasVoted(post.hasVoted || false);
+  }, [post.upvotes, post.hasVoted]);
+
   const handleUpvote = async (e) => {
     e.stopPropagation();
+    if (!user.isAuthenticated || isVoting) return;
+
+    setIsVoting(true);
+    
+    // Optimistic Logic
+    const isUpvoting = !hasVoted;
+    
+    setVotes(prev => isUpvoting ? prev + 1 : prev - 1);
+    setHasVoted(isUpvoting);
+
     try {
-      if (user.isAuthenticated) {
-        await votePost(post.id, user.uid, 'up');
-        if (onVote) onVote(post.id);
-      }
+      await votePost(post.id, user.uid, 'up'); // Backend handles toggle
+      if (onVote) onVote(post.id);
     } catch (error) {
       console.error('Failed to vote:', error);
+      // Revert
+      setVotes(prev => isUpvoting ? prev - 1 : prev + 1);
+      setHasVoted(!isUpvoting);
+      alert("Vote failed.");
+    } finally {
+      setIsVoting(false);
     }
   };
 
@@ -34,11 +57,15 @@ const PostCard = ({ post, onVote }) => {
         <div className="w-12 bg-slate-50 border-r border-slate-100 flex flex-col items-center pt-4 gap-1">
           <button 
             onClick={handleUpvote}
-            className="p-1 rounded hover:bg-slate-200 text-slate-500 hover:text-orange-500 transition-colors"
+            className={`p-1 rounded transition-colors ${
+              hasVoted 
+                ? 'bg-orange-100 text-orange-600 hover:bg-orange-200' 
+                : 'hover:bg-slate-200 text-slate-500 hover:text-orange-500'
+            }`}
           >
-            <ThumbsUp size={20} />
+            <ThumbsUp size={20} className={hasVoted ? "fill-current" : ""} />
           </button>
-          <span className="text-sm font-bold text-slate-700">{post.upvotes || 0}</span>
+          <span className="text-sm font-bold text-slate-700">{votes}</span>
         </div>
         
         {/* Content */}
