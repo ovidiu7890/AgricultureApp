@@ -17,7 +17,8 @@ forum_bp = Blueprint('forum', __name__, url_prefix='/api/forum')
 @forum_bp.route('/posts', methods=['GET'])
 def get_all_posts():
     try:
-        posts = get_all_posts_db()
+        user_id = request.args.get('userId')
+        posts = get_all_posts_db(viewer_id=user_id)
         return jsonify(posts), 200
     except Exception as e:
         return jsonify({"error": "Failed to retrieve forum posts."}), 500
@@ -25,7 +26,8 @@ def get_all_posts():
 
 @forum_bp.route('/posts/<string:post_id>', methods=['GET'])
 def get_post(post_id):
-    post = get_single_post_db(post_id)
+    user_id = request.args.get('userId')
+    post = get_single_post_db(post_id, viewer_id=user_id)
     if post:
         return jsonify(post), 200
     else:
@@ -103,7 +105,7 @@ def create_user_profile():
 def add_post():
     data = request.get_json()
 
-    required_fields = ['authorId', 'title', 'content']
+    required_fields = ['authorId', 'title', 'content', 'category']
     if not data or not all(k in data for k in required_fields):
         return jsonify({"error": f"Missing required fields: {required_fields}"}), 400
 
@@ -111,7 +113,8 @@ def add_post():
         new_post_id = create_post_db(
             author_id=data['authorId'],
             title=data['title'],
-            content=data['content']
+            content=data['content'],
+            category=data['category']
         )
 
         return jsonify({

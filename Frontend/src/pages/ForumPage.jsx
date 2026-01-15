@@ -3,9 +3,12 @@ import { Tractor, Plus } from 'lucide-react';
 import PostCard from '../components/PostCard';
 import Sidebar from '../components/Sidebar';
 import CreatePostModal from '../components/CreatePostModal';
+import ChatWidget from '../components/ChatWidget';
 import { getAllPosts } from '../services/forumService';
+import { useAuth } from '../context/AuthContext';
 
 const ForumPage = ({ searchQuery }) => {
+  const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [activeCategory, setActiveCategory] = useState('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -13,12 +16,12 @@ const ForumPage = ({ searchQuery }) => {
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [user]); // Reload if user changes (e.g. login)
 
   const loadPosts = async () => {
     try {
       setIsLoading(true);
-      const data = await getAllPosts();
+      const data = await getAllPosts(user?.uid);
       setPosts(data);
     } catch (error) {
       console.error('Failed to load posts:', error);
@@ -52,6 +55,11 @@ const ForumPage = ({ searchQuery }) => {
     { id: 'crops', name: 'Crops & Soil' },
     { id: 'livestock', name: 'Livestock' },
     { id: 'machinery', name: 'Machinery' },
+    { id: 'organic', name: 'Organic Farming' },
+    { id: 'market', name: 'Market Prices' },
+    { id: 'government', name: 'Government Schemes' },
+    { id: 'events', name: 'Events' },
+    { id: 'general', name: 'General' },
   ];
 
   const getCategoryName = () => {
@@ -132,35 +140,10 @@ const ForumPage = ({ searchQuery }) => {
         )}
       </main>
 
-      {/* Right Sidebar (Community Info) */}
+      {/* Right Sidebar (Chat) */}
       <aside className="hidden lg:block w-80 flex-shrink-0">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sticky top-24">
-          <div className="bg-green-100 rounded-lg h-24 mb-4 -mx-4 -mt-4 bg-cover bg-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-            <h2 className="absolute bottom-2 left-4 text-white font-bold text-lg">AgriConnect</h2>
-          </div>
-          <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-            The premier community for modern farmers to discuss crop management, livestock care, and agricultural technology.
-          </p>
-          <div className="flex gap-4 text-sm font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">
-            <div className="flex flex-col">
-              <span className="text-lg">14.2k</span>
-              <span className="text-xs text-slate-500 font-normal">Farmers</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg">350</span>
-              <span className="text-xs text-slate-500 font-normal">Online</span>
-            </div>
-          </div>
-          <button 
-            onClick={() => setIsCreateModalOpen(true)}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-full transition-all mb-2"
-          >
-            Create Post
-          </button>
-          <button className="w-full bg-white border border-green-600 text-green-700 hover:bg-green-50 font-bold py-2 rounded-full transition-all">
-            Create Community
-          </button>
+        <div className="sticky top-24 h-[600px]">
+          <ChatWidget />
         </div>
       </aside>
 

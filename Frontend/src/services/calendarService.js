@@ -65,3 +65,19 @@ export const deleteCalendarEntry = async (entryId) => {
     throw error;
   }
 };
+/**
+ * Export calendar to ICS file
+ */
+export const exportCalendar = async (userId) => {
+  try {
+    const response = await axios.get(`${API_ENDPOINTS.CALENDAR}/export`, {
+      headers: getAuthHeaders(),
+      params: { userId },
+      responseType: 'blob', // Important for file download
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error exporting calendar:', error);
+    throw error;
+  }
+};

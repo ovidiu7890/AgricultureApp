@@ -7,18 +7,45 @@ from google.cloud import firestore
 from google.cloud.firestore import Query
 
 
-def get_all_posts_db():
+
+def _get_author_username(author_id):
+    if not author_id:
+        return "Anonymous"
+    try:
+        user_doc = db.collection('users').document(author_id).get()
+        if user_doc.exists:
+            return user_doc.to_dict().get('username', 'Anonymous')
+    except Exception:
+        pass
+    return "Anonymous"
+
+def get_all_posts_db(viewer_id=None):
     try:
         posts_ref = db.collection('posts')
         query = posts_ref.order_by('createdAt', direction=Query.DESCENDING).limit(50)
 
         posts_list = []
+        # Pre-fetch if possible or just loop
+        # For simplicity in this non-relational DB without easy joins, loop:
         for doc in query.stream():
             post_data = doc.to_dict()
             post_data['id'] = doc.id
 
             if 'createdAt' in post_data and post_data['createdAt'] is not None:
-                post_data['createdAt'] = post_data['createdAt'].strftime('%Y-%m-%d %H:%M:%S')
+                # Use ISO format for better JS compatibility
+                post_data['createdAt'] = post_data['createdAt'].isoformat()
+            
+            # Enrich with author name
+            post_data['username'] = _get_author_username(post_data.get('authorId'))
+            # Backward compatibility if needed, or just for ease
+            post_data['author'] = post_data['username']
+
+            # Check if viewer has voted
+            if viewer_id:
+                vote_ref =  db.collection('posts').document(doc.id).collection('votes').document(viewer_id)
+                post_data['hasVoted'] = vote_ref.get().exists
+            else:
+                post_data['hasVoted'] = False
 
             posts_list.append(post_data)
 
@@ -29,7 +56,7 @@ def get_all_posts_db():
         raise
 
 
-def get_single_post_db(post_id):
+def get_single_post_db(post_id, viewer_id=None):
     doc_ref = db.collection('posts').document(post_id)
     doc = doc_ref.get()
 
@@ -38,7 +65,16 @@ def get_single_post_db(post_id):
         post_data['id'] = doc.id
 
         if 'createdAt' in post_data and post_data['createdAt'] is not None:
-            post_data['createdAt'] = post_data['createdAt'].strftime('%Y-%m-%d %H:%M:%S')
+            post_data['createdAt'] = post_data['createdAt'].isoformat()
+
+        post_data['username'] = _get_author_username(post_data.get('authorId'))
+        post_data['author'] = post_data['username']
+
+        if viewer_id:
+             vote_ref = doc_ref.collection('votes').document(viewer_id)
+             post_data['hasVoted'] = vote_ref.get().exists
+        else:
+             post_data['hasVoted'] = False
 
         return post_data
     else:
@@ -55,7 +91,7 @@ def get_user_profile_db(user_uid):
             user_data['id'] = doc.id
 
             if 'createdAt' in user_data and user_data['createdAt'] is not None:
-                user_data['createdAt'] = user_data['createdAt'].strftime('%Y-%m-%d')
+                user_data['createdAt'] = user_data['createdAt'].isoformat()
 
             return user_data
         else:
@@ -78,7 +114,10 @@ def get_comments_for_post_db(post_id):
             comment_data['id'] = doc.id
 
             if 'createdAt' in comment_data and comment_data['createdAt'] is not None:
-                comment_data['createdAt'] = comment_data['createdAt'].strftime('%Y-%m-%d %H:%M:%S')
+                comment_data['createdAt'] = comment_data['createdAt'].isoformat()
+            
+            comment_data['username'] = _get_author_username(comment_data.get('authorId'))
+            comment_data['author'] = comment_data['username']
 
             comments_list.append(comment_data)
 
@@ -133,12 +172,13 @@ def create_user_profile_db(user_uid, username, email, bio=None):
         raise
 
 
-def create_post_db(author_id, title, content):
+def create_post_db(author_id, title, content, category="General"):
     try:
         post_data = {
             'authorId': author_id,
             'title': title,
             'content': content,
+            'category': category,
             'upvotes': 0,
             'downvotes': 0,
             'commentCount': 0,
@@ -164,25 +204,28 @@ def update_vote_transaction(transaction, post_ref, user_uid, vote_type):
     vote_doc = vote_doc_ref.get(transaction=transaction)
 
     if vote_doc.exists:
-        raise ValueError("User has already voted on this post.")
-
-    post_snapshot = post_ref.get(transaction=transaction)
-    if not post_snapshot.exists:
-        raise ValueError("Post does not exist.")
-
-    update_data = {}
-    if vote_type == 'up':
-        update_data = {'upvotes': firestore.Increment(1)}
-    elif vote_type == 'down':
-        update_data = {'downvotes': firestore.Increment(1)}
+        # Toggle off (remove vote)
+        if vote_type == 'up':
+            update_data = {'upvotes': firestore.Increment(-1)}
+        elif vote_type == 'down':
+            update_data = {'downvotes': firestore.Increment(-1)}
+        
+        transaction.update(post_ref, update_data)
+        transaction.delete(vote_doc_ref)
+        return True, "unvoted"
     else:
-        raise ValueError("Invalid vote type.")
+        # Add vote
+        update_data = {}
+        if vote_type == 'up':
+            update_data = {'upvotes': firestore.Increment(1)}
+        elif vote_type == 'down':
+            update_data = {'downvotes': firestore.Increment(1)}
+        else:
+            raise ValueError("Invalid vote type.")
 
-
-    transaction.update(post_ref, update_data)
-    transaction.set(vote_doc_ref, {'votedAt': firestore.SERVER_TIMESTAMP})
-
-    return True
+        transaction.update(post_ref, update_data)
+        transaction.set(vote_doc_ref, {'votedAt': firestore.SERVER_TIMESTAMP})
+        return True, "voted"
 
 
 def handle_vote_db(post_id, user_uid, vote_type):

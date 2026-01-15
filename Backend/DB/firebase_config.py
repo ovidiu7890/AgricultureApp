@@ -1,16 +1,20 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-SERVICE_ACCOUNT_KEY_PATH = r"C:\Users\Claudiu\Downloads\agriculturedb-firebase-adminsdk-fbsvc-b25496b64b.json"
+SERVICE_ACCOUNT_KEY_PATH = r"C:\Facultate\An3Sem1\IS\agriculturedb-firebase-adminsdk-fbsvc-b25496b64b.json"
+
+db = None
 
 if not firebase_admin._apps:
     try:
-            cred = credentials.Certificate(SERVICE_ACCOUNT_KEY_PATH)
-            firebase_admin.initialize_app(cred)
-            print("Firebase Admin SDK initialized successfully.")
+        cred = credentials.Certificate(SERVICE_ACCOUNT_KEY_PATH)
+        firebase_admin.initialize_app(cred)
+        print("Firebase Admin SDK initialized successfully.")
+        db = firestore.client()
     except FileNotFoundError:
         print(f"Error: Service account key not found at {SERVICE_ACCOUNT_KEY_PATH}")
-
     except Exception as e:
         print(f"Error initializing Firebase: {e}")
+else:
+    # App already initialized, just get the client
     db = firestore.client()

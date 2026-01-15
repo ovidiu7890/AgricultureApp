@@ -19,7 +19,7 @@ const PostDetailPage = () => {
   const loadPost = async () => {
     try {
       setIsLoading(true);
-      const data = await getPost(postId);
+      const data = await getPost(postId, user?.uid);
       setPost(data);
     } catch (error) {
       console.error('Failed to load post:', error);
@@ -30,14 +30,38 @@ const PostDetailPage = () => {
     }
   };
 
+  const [voteCount, setVoteCount] = useState(0);
+  const [hasVoted, setHasVoted] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
+
+  useEffect(() => {
+    if (post) {
+      setVoteCount(post.upvotes || 0);
+      setHasVoted(post.hasVoted || false);
+    }
+  }, [post]);
+
   const handleUpvote = async () => {
+    if (!user.isAuthenticated || isVoting) return;
+
+    setIsVoting(true);
+    
+    // Optimistic Logic
+    const isUpvoting = !hasVoted;
+    
+    setVoteCount(prev => isUpvoting ? prev + 1 : prev - 1);
+    setHasVoted(isUpvoting);
+
     try {
-      if (user.isAuthenticated) {
-        await votePost(postId, user.uid, 'up');
-        loadPost(); // Reload to get updated vote count
-      }
+      await votePost(postId, user.uid, 'up'); // Backend handles toggle
     } catch (error) {
       console.error('Failed to vote:', error);
+      // Revert
+      setVoteCount(prev => isUpvoting ? prev - 1 : prev + 1);
+      setHasVoted(!isUpvoting);
+      alert("Vote failed.");
+    } finally {
+      setIsVoting(false);
     }
   };
 
@@ -98,20 +122,24 @@ const PostDetailPage = () => {
           <div className="w-16 bg-slate-50 border-r border-slate-100 flex flex-col items-center pt-6 gap-2">
             <button 
               onClick={handleUpvote}
-              className="p-2 rounded hover:bg-slate-200 text-slate-500 hover:text-orange-500 transition-colors"
+              className={`p-2 rounded transition-colors ${
+                hasVoted 
+                  ? 'bg-orange-100 text-orange-600 hover:bg-orange-200' 
+                  : 'hover:bg-slate-200 text-slate-500 hover:text-orange-500'
+              }`}
             >
-              <ThumbsUp size={24} />
+              <ThumbsUp size={24} className={hasVoted ? "fill-current" : ""} />
             </button>
-            <span className="text-lg font-bold text-slate-700">{post.upvotes || 0}</span>
+            <span className="text-lg font-bold text-slate-700">{voteCount}</span>
           </div>
           
           {/* Content */}
           <div className="p-6 flex-1">
             {/* Meta */}
             <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
-              <span className="font-bold text-slate-900">{post.author || post.authorName}</span>
+              <span className="font-bold text-slate-900">{post.username || post.author || "Anonymous"}</span>
               <span>•</span>
-              <span>{post.time || new Date(post.timestamp).toLocaleString()}</span>
+              <span>{new Date(post.createdAt || post.timestamp).toLocaleString()}</span>
               <span>•</span>
               <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-200">
                 {post.category}

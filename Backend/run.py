@@ -17,6 +17,7 @@ from DB.firebase_config import db
 # Now import blueprints (they will use the already-initialized Firebase)
 from forum_api import forum_bp
 from calendar_api import calendar_bp
+from chat_api import chat_bp
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -24,6 +25,7 @@ CORS(app)  # Enable CORS for all routes
 # Register blueprints
 app.register_blueprint(forum_bp)
 app.register_blueprint(calendar_bp)
+app.register_blueprint(chat_bp)
 
 
 @app.route('/')

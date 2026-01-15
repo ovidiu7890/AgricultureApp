@@ -14,6 +14,10 @@ export const API_ENDPOINTS = {
   // Calendar endpoints
   CALENDAR: `${API_BASE_URL}/api/calendar/`,
   CALENDAR_ENTRY: (entryId) => `${API_BASE_URL}/api/calendar/${entryId}`,
+  
+  // Chat endpoints
+  CHAT: `${API_BASE_URL}/api/chat`,
+  CHAT_HEALTH: `${API_BASE_URL}/api/chat/health`,
 };
 
 export const getAuthHeaders = () => {

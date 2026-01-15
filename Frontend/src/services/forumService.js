@@ -4,10 +4,11 @@ import { API_ENDPOINTS, getAuthHeaders } from './apiConfig';
 /**
  * Get all forum posts
  */
-export const getAllPosts = async () => {
+export const getAllPosts = async (userId) => {
   try {
     const response = await axios.get(API_ENDPOINTS.FORUM_POSTS, {
       headers: getAuthHeaders(),
+      params: userId ? { userId } : {}
     });
     return response.data;
   } catch (error) {
@@ -19,10 +20,11 @@ export const getAllPosts = async () => {
 /**
  * Get a single post by ID
  */
-export const getPost = async (postId) => {
+export const getPost = async (postId, userId) => {
   try {
     const response = await axios.get(API_ENDPOINTS.FORUM_POST(postId), {
       headers: getAuthHeaders(),
+      params: userId ? { userId } : {}
     });
     return response.data;
   } catch (error) {

@@ -16,7 +16,7 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
           <div className="bg-green-600 p-2 rounded-lg">
             <Wheat className="text-white" size={24} />
           </div>
-          <span className="text-xl font-bold text-green-800 hidden sm:block">AgriConnect</span>
+          <span className="text-xl font-bold text-green-800 hidden sm:block">Agrilex</span>
         </Link>
 
         {/* Search Bar */}
