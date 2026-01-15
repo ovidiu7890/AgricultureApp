@@ -44,9 +44,9 @@ const PostCard = ({ post, onVote }) => {
         {/* Content */}
         <div className="p-4 flex-1">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-            <span className="font-bold text-slate-900 hover:underline">{post.author || post.authorName}</span>
+            <span className="font-bold text-slate-900 hover:underline">{post.username || post.author || "Anonymous"}</span>
             <span>•</span>
-            <span>{post.time || new Date(post.timestamp).toLocaleString()}</span>
+            <span>{new Date(post.createdAt || post.timestamp).toLocaleString()}</span>
             <span>•</span>
             <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full border border-slate-200">
               {post.category}
@@ -61,10 +61,7 @@ const PostCard = ({ post, onVote }) => {
               <MessageSquare size={18} />
               {post.comments || post.commentCount || 0} Comments
             </button>
-            <button className="flex items-center gap-2 hover:bg-slate-100 px-2 py-1 rounded transition-colors">
-              <Share2 size={18} />
-              Share
-            </button>
+
             <div className="flex-1"></div>
             <button className="hover:bg-slate-100 p-1 rounded">
               <MoreHorizontal size={18} />

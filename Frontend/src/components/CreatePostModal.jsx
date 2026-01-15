@@ -25,6 +25,7 @@ const CreatePostModal = ({ isOpen, onClose, onPostCreated }) => {
         authorId: user.uid,
         title: title.trim(),
         content: content.trim(),
+        category: category,
       };
 
       const result = await createPost(postData);
@@ -90,8 +91,14 @@ const CreatePostModal = ({ isOpen, onClose, onPostCreated }) => {
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="Crops">Crops & Soil</option>
+              <option value="Crops">Crops & Soil</option>
               <option value="Livestock">Livestock</option>
               <option value="Machinery">Machinery</option>
+              <option value="Organic">Organic Farming</option>
+              <option value="Market">Market Prices</option>
+              <option value="Government">Government Schemes</option>
+              <option value="Events">Events</option>
+              <option value="General">General</option>
             </select>
           </div>
 

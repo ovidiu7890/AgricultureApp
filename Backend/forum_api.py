@@ -103,7 +103,7 @@ def create_user_profile():
 def add_post():
     data = request.get_json()
 
-    required_fields = ['authorId', 'title', 'content']
+    required_fields = ['authorId', 'title', 'content', 'category']
     if not data or not all(k in data for k in required_fields):
         return jsonify({"error": f"Missing required fields: {required_fields}"}), 400
 
@@ -111,7 +111,8 @@ def add_post():
         new_post_id = create_post_db(
             author_id=data['authorId'],
             title=data['title'],
-            content=data['content']
+            content=data['content'],
+            category=data['category']
         )
 
         return jsonify({

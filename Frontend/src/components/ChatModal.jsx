@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Bot, User, Loader2, AlertCircle } from 'lucide-react';
-import { sendChatMessage } from '../services/chatService';
+import { X, Send, Bot, User, Loader2, AlertCircle, Plus } from 'lucide-react';
+import { sendChatMessage, getConversations, getConversationMessages } from '../services/chatService';
+import { useAuth } from '../context/AuthContext';
 
 const ChatModal = ({ isOpen, onClose }) => {
+  const { user } = useAuth();
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -11,6 +13,8 @@ const ChatModal = ({ isOpen, onClose }) => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationId, setConversationId] = useState(null);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -24,7 +28,43 @@ const ChatModal = ({ isOpen, onClose }) => {
     if (isOpen) {
       inputRef.current?.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, user]);
+
+
+
+  const loadConversation = async (convId) => {
+    const result = await getConversationMessages(convId);
+    if (!result.error && result.messages) {
+      // Convert messages to our format
+      const loadedMessages = result.messages.map(msg => ({
+        role: msg.role,
+        content: msg.content,
+        citations: msg.citations || []
+      }));
+      
+      // Add welcome message at the start
+      setMessages([
+        {
+          role: 'assistant',
+          content: 'Hello! I\'m Agri-AI, your agricultural assistant. Ask me anything about farming, crops, and agriculture practices!',
+        },
+        ...loadedMessages
+      ]);
+      setConversationId(convId);
+      setShowHistory(false);
+    }
+  };
+
+  const startNewConversation = () => {
+    setMessages([
+      {
+        role: 'assistant',
+        content: 'Hello! I\'m Agri-AI, your agricultural assistant. Ask me anything about farming, crops, and agriculture practices!',
+      }
+    ]);
+    setConversationId(null);
+    setShowHistory(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,12 +72,26 @@ const ChatModal = ({ isOpen, onClose }) => {
     if (!question || isLoading) return;
 
     // Add user message
-    setMessages(prev => [...prev, { role: 'user', content: question }]);
+    const newUserMessage = { role: 'user', content: question };
+    setMessages(prev => [...prev, newUserMessage]);
     setInputValue('');
     setIsLoading(true);
 
     try {
-      const response = await sendChatMessage(question);
+      // Build history from messages (excluding the welcome message)
+      const history = messages
+        .filter((_, idx) => idx > 0) // Skip welcome message
+        .map(msg => ({ role: msg.role, content: msg.content }));
+      
+      // Add the current message to history
+      history.push({ role: 'user', content: question });
+
+      const response = await sendChatMessage(
+        question,
+        conversationId,
+        user?.uid || 'anonymous',
+        history.slice(0, -1) // Don't include current question in history
+      );
       
       if (response.error) {
         setMessages(prev => [...prev, {
@@ -46,11 +100,17 @@ const ChatModal = ({ isOpen, onClose }) => {
           isError: true
         }]);
       } else {
+        // Update conversation ID if this is a new conversation
+        if (response.conversationId) {
+          setConversationId(response.conversationId);
+        }
+        
         setMessages(prev => [...prev, {
           role: 'assistant',
           content: response.answer,
           citations: response.citations
         }]);
+        
       }
     } catch (error) {
       setMessages(prev => [...prev, {
@@ -86,13 +146,24 @@ const ChatModal = ({ isOpen, onClose }) => {
               <p className="text-xs text-green-100">Powered by RAG Technology</p>
             </div>
           </div>
-          <button 
-            onClick={onClose}
-            className="p-2 hover:bg-white/20 rounded-full transition-colors"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={startNewConversation}
+              className="p-2 hover:bg-white/20 rounded-full transition-colors"
+              title="New conversation"
+            >
+              <Plus size={20} />
+            </button>
+            <button 
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-full transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
+
+
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">

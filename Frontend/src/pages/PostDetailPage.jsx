@@ -109,9 +109,9 @@ const PostDetailPage = () => {
           <div className="p-6 flex-1">
             {/* Meta */}
             <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
-              <span className="font-bold text-slate-900">{post.author || post.authorName}</span>
+              <span className="font-bold text-slate-900">{post.username || post.author || "Anonymous"}</span>
               <span>•</span>
-              <span>{post.time || new Date(post.timestamp).toLocaleString()}</span>
+              <span>{new Date(post.createdAt || post.timestamp).toLocaleString()}</span>
               <span>•</span>
               <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-200">
                 {post.category}

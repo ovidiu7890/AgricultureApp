@@ -106,9 +106,9 @@ const CommentSection = ({ postId }) => {
               <div className="flex-1 bg-slate-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2 text-xs text-slate-500">
-                    <span className="font-bold text-slate-900">{comment.authorName}</span>
+                    <span className="font-bold text-slate-900">{comment.username || comment.authorName || "Anonymous"}</span>
                     <span>•</span>
-                    <span>{new Date(comment.timestamp).toLocaleString()}</span>
+                    <span>{new Date(comment.createdAt || comment.timestamp).toLocaleString()}</span>
                   </div>
                   {user.uid === comment.authorId && (
                     <button
