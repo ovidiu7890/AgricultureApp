@@ -1,0 +1,8 @@
+0,1,2
+E,=,estimated average annual soil loss in tons per acre per year
+ƒ,=,indicates relationships that are not straight- line mathematical calculations
+A,=,percentage of soil fractions greater than 0.84 millimeter;
+K,=,soil surface roughness factor
+C,=,climatic factor
+L,=,the unsheltered distance
+V,=,the vegetative cover factor

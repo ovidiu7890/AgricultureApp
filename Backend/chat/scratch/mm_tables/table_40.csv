@@ -1,0 +1,31 @@
+Element,Name of material,Percent element in material
+B,Borax,11.3
+B,Borate 46,14.0
+B,Borate 65,20.0
+B,Boric acid,17.0
+B,Solubor,20.0
+B,Boron frits,2.0-6.0
+Cu,Copper sulfate,22.5
+Cu,Copper frits,variable
+Cu,Copper chelates,variable
+Cu,Other organics,variable
+Fe,Iron sulfates,19-23
+Fe,Iron oxides,69-73
+Fe,Iron ammonium sulfate,14.0
+Fe,Iron frits,variable
+Fe,Iron chelates,5-14
+Fe,Other organics,5-10
+Mn,Manganese sulfates,26-28
+Mn,Manganese oxides,41-68
+Mn,Manganese chelates,12
+Mn,Manganese chloride,17
+Mn,Manganese frits,10-25
+Zn,Zinc sulfates,23-35
+Zn,Zinc oxides,78
+Zn,Zinc carbonate,52
+Zn,Zinc frits,variable
+Zn,Zinc phosphate,51
+Zn,Zinc chelates,9-14
+Zn,Other organics,5-10
+Mo,Sodium molybdate,39-41
+Mo,Molybdic acid,47.5
