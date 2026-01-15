@@ -8,23 +8,19 @@ def convert_any_to_fixed_pdf(input_path: str, output_name: str = "input_source.p
     if not inp.exists():
         raise FileNotFoundError(f"Input not found: {inp}")
 
-    # Output is ALWAYS created in the same folder as the input
     out_pdf = inp.parent / output_name
     ext = inp.suffix.lower()
 
-    # If input is already PDF -> create a NEW PDF file with the fixed name (copy)
     if ext == ".pdf":
         shutil.copyfile(inp, out_pdf)
         return out_pdf
 
-    # Images -> PDF
     if ext in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}:
         from PIL import Image
         img = Image.open(inp).convert("RGB")
         img.save(out_pdf)
         return out_pdf
 
-    # Other docs -> LibreOffice headless -> rename to fixed name
     out_dir = out_pdf.parent
     cmd = [
         "soffice",
@@ -47,7 +43,6 @@ def convert_any_to_fixed_pdf(input_path: str, output_name: str = "input_source.p
     if not produced.exists():
         raise RuntimeError(f"Expected output not found: {produced}")
 
-    # Overwrite if it exists
     if out_pdf.exists():
         out_pdf.unlink()
     produced.replace(out_pdf)

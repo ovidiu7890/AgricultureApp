@@ -84,12 +84,7 @@ def system_prompt() -> str:
 
 
 def build_evidence(hits: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]]]:
-    """
-    Returns:
-      - evidence_text: joined textual evidence
-      - image_items: list of Responses API image inputs
-    """
-    # Evidence text
+
     parts = []
     page_hits = [h for h in hits if h["rtype"] == "page"]
     for h in hits:
@@ -97,7 +92,6 @@ def build_evidence(hits: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]
         parts.append(f"[{h['rid']}]\n{txt}")
     evidence_text = "\n\n---\n\n".join(parts)
 
-    # Attach up to N page images
     image_items = []
     for h in page_hits[:MAX_IMAGES_PER_ANSWER]:
         img_path = Path(h["meta"]["image_path"])
@@ -157,7 +151,7 @@ def main():
     client = OpenAI(api_key=api_key)
     index, records = load_index_and_records()
 
-    print("\n✅ Multimodal PDF Chat ready (text + tables + charts via page images).")
+    print("\nMultimodal PDF Chat ready (text + tables + charts via page images).")
     print("Type a question, or 'exit'.\n")
 
     while True:
