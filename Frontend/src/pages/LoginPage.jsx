@@ -54,7 +54,7 @@ const LoginPage = () => {
               <Wheat className="text-white" size={48} />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">AgriConnect</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Agrilex</h1>
           <p className="text-slate-600">Welcome back! Sign in to your account</p>
         </div>
 

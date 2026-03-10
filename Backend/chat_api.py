@@ -18,6 +18,7 @@ from openai import OpenAI
 
 # Load environment variables from chat/.env
 load_dotenv(os.path.join(chat_dir, '.env'))
+load_dotenv(os.path.join(os.path.dirname(chat_dir), '.env'))
 
 # Import Firebase
 from DB.firebase_config import db

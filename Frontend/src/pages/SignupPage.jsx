@@ -74,7 +74,7 @@ const SignupPage = () => {
               <Wheat className="text-white" size={48} />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Join AgriConnect</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Join Agrilex</h1>
           <p className="text-slate-600">Create your account to get started</p>
         </div>
 
