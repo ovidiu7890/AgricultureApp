@@ -34,10 +34,10 @@ load_dotenv()
 
 @dataclass
 class Record:
-    rid: str                 # e.g. "page_12" or "table_3"
-    rtype: str               # "page" or "table"
-    text: str                # retrieval text
-    meta: Dict[str, Any]     # includes image path for pages / csv path for tables
+    rid: str
+    rtype: str
+    text: str
+    meta: Dict[str, Any]
 
 
 def normalize(x: np.ndarray) -> np.ndarray:
@@ -50,7 +50,6 @@ def embed_texts(client, texts):
     import time
     import numpy as np
 
-    # 1) sanitize: keep only non-empty strings
     clean_texts = []
     kept_idx = []
     for i, t in enumerate(texts):
@@ -67,14 +66,12 @@ def embed_texts(client, texts):
     if not clean_texts:
         raise ValueError("No valid texts to embed after sanitization (all were empty/None).")
 
-    # 2) batch to avoid request-size issues
-    BATCH = 64  # safe default
+    BATCH = 64
     all_vecs = []
 
     for start in range(0, len(clean_texts), BATCH):
         batch = clean_texts[start:start + BATCH]
 
-        # basic retry for transient errors
         for attempt in range(5):
             try:
                 resp = client.embeddings.create(
@@ -92,8 +89,6 @@ def embed_texts(client, texts):
 
     vecs_clean = np.vstack(all_vecs)
 
-    # 3) put embeddings back into original positions (for FAISS alignment)
-    #    any dropped records get a zero-vector (or you can drop those records entirely)
     dim = vecs_clean.shape[1]
     vecs_full = np.zeros((len(texts), dim), dtype=np.float32)
 
@@ -127,7 +122,6 @@ def build_records(conv_res) -> List[Record]:
 
     records: List[Record] = []
 
-    # ---- Page records
     for content_text, _content_md, _content_dt, _cells, _segs, page in generate_multimodal_pages(conv_res):
         page_no = page.page_no
         img_path = OUT_PAGES / f"page_{page_no}.png"
@@ -146,7 +140,6 @@ def build_records(conv_res) -> List[Record]:
             )
         )
 
-    # ---- Table records
     for ix, table in enumerate(conv_res.document.tables, start=1):
         df: pd.DataFrame = table.export_to_dataframe(doc=conv_res.document)
         csv_path = OUT_TABLES / f"table_{ix}.csv"
@@ -178,7 +171,7 @@ def build_records(conv_res) -> List[Record]:
 
 def build_faiss_index(vectors: np.ndarray) -> faiss.Index:
     dim = vectors.shape[1]
-    index = faiss.IndexFlatIP(dim)  # cosine-like with normalized vectors
+    index = faiss.IndexFlatIP(dim)
     index.add(vectors)
     return index
 

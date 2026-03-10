@@ -53,7 +53,6 @@ def main():
             fn = out_elements / f"{stem}-picture-{picture_counter}.png"
             element.get_image(res.document).save(fn, "PNG")
 
-    # Save markdown/html with referenced images
     md_refs = OUTPUT_DIR / f"{stem}-with-image-refs.md"
     html_refs = OUTPUT_DIR / f"{stem}-with-image-refs.html"
 
