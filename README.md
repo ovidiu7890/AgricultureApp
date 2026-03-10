@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">🌾 AgriConnect</h1>
+  <h1 align="center">🌾 Agrilex</h1>
   <p align="center">
     <strong>A full-stack agriculture community platform with AI-powered document Q&A</strong>
   </p>
